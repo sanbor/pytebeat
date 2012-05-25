@@ -6,6 +6,7 @@
 # - improve parse errors
 
 import sys, wave, os, time, subprocess, pygame, shuntparse, sdltextfield
+from pygame.locals import *
 
 try:
     from Numeric import array, arange, UInt8
@@ -57,7 +58,10 @@ def run_mainloop(error, formula, outfd, screen):
         # For some reason, normal ways of exiting aren’t working.
         os.kill(os.getpid(), 9)
     elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
-        formula.handle_keyevent(event)
+        if (event.key == K_ESCAPE):
+            os.kill(os.getpid(), 9)
+        else:
+            formula.handle_keyevent(event)
     elif event.type == pygame.NOEVENT:
         formula.poll()
 
@@ -107,7 +111,7 @@ def make_window():
     outfile2 = open_new_outfile()
     outfd = Tee(outfd, outfile2)
     pygame.init()
-    default_font = '/home/kragen/.fonts/a/anami.ttf'
+    default_font = 'NovaMono.ttf'
     font = pygame.font.Font(default_font, 24) if os.path.exists(default_font) else None
     
     
